@@ -2,10 +2,29 @@ import 'package:flutter/material.dart';
 
 import '../model/product.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends StatefulWidget {
 
   const ProductDetailPage({super.key ,required this.product});
   final Product product;
+
+  @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailPage> {
+  int qua=0;
+  void increase(){
+    qua++;
+    if(qua>=widget.product.quantity){
+      qua=widget.product.quantity;
+    }
+  }
+  void decrease(){
+    qua--;
+    if(qua<=0){
+      qua=0;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +56,7 @@ class ProductDetailPage extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.center,
-              child: Image.asset(product.imageUrl,
+              child: Image.asset(widget.product.imageUrl,
               fit: BoxFit.fill,
                 width: double.infinity,
               ),
@@ -48,7 +67,7 @@ class ProductDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${product.title}',
+                    '${widget.product.title}',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -56,7 +75,7 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${product.quantity} Pieces',
+                    '${widget.product.quantity} Pieces',
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.green,
@@ -67,16 +86,26 @@ class ProductDetailPage extends StatelessWidget {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.remove),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            decrease();
+
+                          });
+                        },
                       ),
-                      const Text('1', style: TextStyle(fontSize: 18)),
+                       Text('$qua', style: const TextStyle(fontSize: 18)),
                       IconButton(
                         icon: const Icon(Icons.add),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            increase();
+
+                          });
+                        },
                       ),
                       const Spacer(),
                       Text(
-                        '\$${product.price}',
+                        '\$${widget.product.price}',
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -94,7 +123,7 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    product.description,
+                    widget.product.description,
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 18),
